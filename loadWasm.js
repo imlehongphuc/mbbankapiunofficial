@@ -1,8 +1,3 @@
-/**
- * Env NodeJS v22.4.0
- * By sieuthicode.com
- * ;-; sieuthicode.com
- */
 import { JSDOM } from "jsdom";
 
 const dom = new JSDOM('', {
@@ -600,7 +595,7 @@ const processAsync = (param1, param2, generatorFunction) =>
  * 
  * @param {Buffer} wasmBytes file wasm
  * @param {Object} requestData data ?
- * @param {string} args1 là số => chuỗi, có thể là -1, 0, ... ? Ely k hiểu tác dụng là gì
+ * @param {string}
  * @returns 
  */
 export default function (wasmBytes, requestData, args1) {
