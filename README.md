@@ -29,8 +29,8 @@ Dưới đây là các bước để triển khai API này trên Vercel:
     * Sau khi triển khai thành công, Vercel sẽ cung cấp cho bạn một URL duy nhất cho API của bạn.
     * Truy cập API mặc định tại: `https://linkduanvercel/aaaa` (hãy thay `linkduanvercel` bằng url dự án của bạn).
     * Để nhận dữ liệu đã được curl sử dụng 2 file PHP sau:
-        * [cron 1 lần trên giờ](/blob/main/cron%201%20lan%20tren%20gio.php)
-        * [cron 1 lần trên phút](/blob/main/cron%201%20lan%20tren%20phut.php)
+        * [cron 1 lần trên giờ](/cron%201%20lan%20tren%20gio.php)
+        * [cron 1 lần trên phút](/cron%201%20lan%20tren%20phut.php)
 
 ## Lưu ý Quan Trọng
 
