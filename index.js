@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import cryptoNode from "crypto";
 import { JSDOM } from "jsdom";
-import wasm from "./loadWasm.js"; // Assuming loadWasm.js is in the same directory and correctly loads wasm
+import wasm from "./loadWasm.js";
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
@@ -13,9 +13,9 @@ const client = wrapper(axios.create({ jar }));
 const USERNAME_CLIENT = process.env.username; // Lấy từ biến môi trường (Vercel Environment Variables)
 const PASSWORD_CLIENT = process.env.password; // Lấy từ biến môi trường (Vercel Environment Variables)
 
-const auth = "Basic RU1CUkVUQUlMV0VCOlNEMjM0ZGZnMzQlI0BGR0AzNHNmc2RmNDU4NDNm"; // Static auth - check if this should be dynamic or env var
+const auth = "Basic RU1CUkVUQUlMV0VCOlNEMjM0ZGZnMzQlI0BGR0AzNHNmc2RmNDU4NDNm";
 
-// Check for username and password at the beginning of the handler function
+// Check Username và password
 async function mbbankLogin() {
     if (!USERNAME_CLIENT || !PASSWORD_CLIENT) {
         console.error('Error: Please fill in your username and password in Vercel Environment Variables.');
@@ -24,9 +24,7 @@ async function mbbankLogin() {
 
     try {
         console.log('Username and password are valid. Proceeding with login.');
-
-        // Ensure main.wasm exists (assuming it's in the same directory in Vercel deployment)
-        const wasmFilePath = path.resolve("./main.wasm"); // Assuming main.wasm is in the root of your Vercel project
+        const wasmFilePath = path.resolve("./main.wasm");
         if (!fs.existsSync(wasmFilePath)) {
             console.log("Downloading main.wasm...");
             await downloadFile("https://online.mbbank.com.vn/assets/wasm/main.wasm", wasmFilePath);
@@ -35,8 +33,6 @@ async function mbbankLogin() {
             console.log("main.wasm already exists.");
         }
 
-
-        // Function to download file (modified to accept filepath)
         async function downloadFile(url, filePath) {
             const response = await client({
                 url,
@@ -63,8 +59,6 @@ async function mbbankLogin() {
             });
         }
 
-
-        // Get HTML content to extract script URL
         const htmlContent = await client.get("https://online.mbbank.com.vn/pl/login", {
             headers: {
                 accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -97,8 +91,8 @@ async function mbbankLogin() {
         const captchaResponse = await client.post(
             "https://online.mbbank.com.vn/api/retail-web-internetbankingms/getCaptchaImage",
             {
-                refNo: String(Date.now()), // Generate dynamic refNo
-                deviceIdCommon: "ms7jhh48-mbib-0000-0000-2024071018571948", // Consider making deviceIdCommon dynamic if needed
+                refNo: String(Date.now()),
+                deviceIdCommon: "ms7jhh48-mbib-0000-0000-2024071018571948",
                 sessionId: "",
             },
             {
@@ -112,10 +106,8 @@ async function mbbankLogin() {
         );
 
         const base64Image = captchaResponse.data.imageString;
-
-        // FUNCTION SOLVING CAPTCHA (moved inside for scope, can be outside if needed)
         async function solveCaptcha(base64Image) {
-            const url = "http://103.72.96.214:8277/api/captcha/mbbank"; //External Captcha Solving Service - Ensure reliable
+            const url = "http://103.72.96.214:8277/api/captcha/mbbank";
             const headers = {
                 "Content-Type": "application/json",
             };
@@ -141,7 +133,7 @@ async function mbbankLogin() {
                 return result.captcha;
             } catch (error) {
                 console.error("Error solving captcha:", error.message);
-                throw error; // Re-throw to be caught in the main try-catch
+                throw error;
             }
         }
 
@@ -152,10 +144,10 @@ async function mbbankLogin() {
             userId: USERNAME_CLIENT,
             password: cryptoNode.createHash("md5").update(PASSWORD_CLIENT).digest("hex"),
             captcha: captchaSolution,
-            ibAuthen2faString: "c722fa8dd6f5179150f472497e022ba0", // Static 2FA string -  Potentially needs dynamic handling
+            ibAuthen2faString: "c722fa8dd6f5179150f472497e022ba0",
             sessionId: null,
-            refNo: String(Date.now()), // Dynamic refNo
-            deviceIdCommon: "ms7jhh48-mbib-0000-0000-2024071018571948", // Consider dynamic deviceIdCommon
+            refNo: String(Date.now()),
+            deviceIdCommon: "ms7jhh48-mbib-0000-0000-2024071018571948",
         };
 
 
@@ -175,22 +167,22 @@ async function mbbankLogin() {
                         app: "MB_WEB",
                         authorization: auth,
                         "content-type": "application/json; charset=UTF-8",
-                        "elastic-apm-traceparent": "00-2f346e62082f1d9b71c22fb4ae20760f-2f2c02091e76c71f-01", // Static traceparent - Could be dynamic if needed
-                        refno: String(Date.now()), // Dynamic refNo
+                        "elastic-apm-traceparent": "00-2f346e62082f1d9b71c22fb4ae20760f-2f2c02091e76c71f-01",
+                        refno: String(Date.now()),
                         "sec-ch-ua": '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
                         "sec-ch-ua-mobile": "?0",
                         "sec-ch-ua-platform": '"Windows"',
                         "sec-fetch-dest": "empty",
                         "sec-fetch-mode": "cors",
                         "sec-fetch-site": "same-origin",
-                        "x-request-id": String(Date.now()), // Dynamic x-request-id
+                        "x-request-id": String(Date.now()),
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                     },
                 }
             )
             .catch(e => {
                 console.error("Login request error:", e.message);
-                return { data: { error: e.message } }; // Return error data in case of axios error
+                return { data: { error: e.message } };
             });
 
         const responseData = res.data;
@@ -198,35 +190,35 @@ async function mbbankLogin() {
         if (responseData && responseData.sessionId) {
             const sessionId = responseData.sessionId;
             console.log('Login successful, Session ID:', sessionId);
-            return { success: true, sessionId: sessionId }; // Successful login JSON response
+            return { success: true, sessionId: sessionId };
         } else {
             console.log('Login failed or Session ID not found.');
-            return { success: false, error: responseData.error || "Login failed, session ID not found.", responseData }; // Failed login JSON response with error details
+            return { success: false, error: responseData.error || "Login failed, session ID not found.", responseData };
         }
 
     } catch (error) {
         console.error("Main execution error:", error);
-        return { success: false, error: error.message }; // General error JSON response
+        return { success: false, error: error.message };
     }
 }
 
 
 // Vercel Function Handler (for API endpoint)
 export default async function handler(req, res) {
-    if (req.url === '/hellolickmydick') {
+    if (req.url === '/aaaa') { //Nên thay để tránh 1 số bot Crawl làm thay SessionID
         if (req.method === 'GET') {
             const loginResult = await mbbankLogin();
 
             if (loginResult.success) {
                 return res.status(200).json({ success: true, sessionId: loginResult.sessionId });
             } else {
-                return res.status(500).json({ success: false, error: loginResult.error, details: loginResult.responseData }); // Include details for debugging
+                return res.status(500).json({ success: false, error: loginResult.error, details: loginResult.responseData });
             }
         } else {
-            return res.status(405).json({ success: false, error: 'Method not allowed. Use GET for /hello.' });
+            return res.status(405).json({ success: false, error: 'Method nopt Allowed.' });
         }
     } else {
-        res.writeHead(302, { 'Location': 'https://pornhub.com' });
+        res.writeHead(302, { 'Location': 'https://pornhub.com' }); //Tránh bị Bot crawl.
         res.end();
     }
                 }
