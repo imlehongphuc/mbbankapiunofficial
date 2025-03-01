@@ -25,8 +25,12 @@ Dưới đây là các bước để triển khai API này trên Vercel:
     * **Quan trọng:** Hãy đảm bảo rằng thông tin đăng nhập MBBank bạn nhập là chính xác. Bạn có thể kiểm tra điều này bằng cách đăng nhập vào ứng dụng MBBank chính thức.
 6.  **Triển khai lại dự án:**
     * Sau khi thiết lập các biến môi trường, hãy triển khai lại dự án Vercel của bạn để các thay đổi có hiệu lực.
-7.  **Truy cập API:**
-    * Sau khi triển khai thành công, Vercel sẽ cung cấp cho bạn một URL duy nhất cho API của bạn. Sử dụng URL này để truy cập các điểm cuối API.
+7.  **Truy cập API và các file Cron:**
+    * Sau khi triển khai thành công, Vercel sẽ cung cấp cho bạn một URL duy nhất cho API của bạn.
+    * Truy cập API mặc định tại: `https://linkduanvercel/aaaa` (hãy thay `linkduanvercel` bằng url dự án của bạn).
+    * Để nhận dữ liệu đã được curl sử dụng 2 file PHP sau:
+        * [cron 1 lần trên giờ](/blob/main/cron%201%20lan%20tren%20gio.php)
+        * [cron 1 lần trên phút](/blob/main/cron%201%20lan%20tren%20phut.php)
 
 ## Lưu ý Quan Trọng
 
