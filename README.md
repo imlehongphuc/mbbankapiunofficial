@@ -15,7 +15,7 @@ Dưới đây là các bước để triển khai API này trên Vercel:
 3.  **Tạo dự án Vercel mới:**
     * Nhấp vào nút "New Project".
 4.  **Kết nối kho lưu trữ GitHub:**
-    * Sao chép liên kết kho lưu trữ GitHub: [Github](https://github.com/imlehongphuc/mbbankapiunofficial/).
+    * Sao chép liên kết kho lưu trữ GitHub: [Github](https://github.com/imlehongphuc/mbbankapiunofficial/tree/vercel).
     * Dán liên kết vào Vercel để kết nối kho lưu trữ của bạn.
 5.  **Thiết lập biến môi trường:**
     * Trong cài đặt dự án Vercel, hãy đi tới phần "Environment Variables".
